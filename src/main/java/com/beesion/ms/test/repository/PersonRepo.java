@@ -20,4 +20,25 @@ public class PersonRepo implements IPersonRepo {
 		em.persist(per);
 	}
 
+	@Override
+	@Transactional
+	public void delete(Long id) {
+		Person person = findById(id);
+		if (person != null) {
+			em.remove(person);
+		}
+	}
+
+	@Override
+	public Person findById(Long id) {
+		return em.find(Person.class, id);
+	}
+
+	@Override
+	@Transactional
+	public Person merge(Person per) {
+		return em.merge(per);
+	}
+
+
 }

@@ -6,12 +6,15 @@ import com.beesion.ms.test.service.IPersonService;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
+import jakarta.ws.rs.NotFoundException;
 
 @ApplicationScoped
 public class PersonService implements IPersonService{
 
-	//@Inject 
+	//@Inject
 	PersonRepo personRepo = new PersonRepo();
+
 	
 	@Inject 
 	PersonRepo personRepos;
@@ -20,7 +23,30 @@ public class PersonService implements IPersonService{
 	public void save(Person per) {
 		personRepos.save(per);
 	}
-	
-	
+
+	@Override
+	public void delete(Long id){
+		Person person = personRepos.findById(id);
+		if (person == null) {
+			throw new NotFoundException("No se encontró la persona con id: " + id);
+		}
+		personRepos.delete(id);
+	}
+
+	@Override
+	@Transactional
+	public void update(Long id, Person per) {
+		Person person = personRepos.findById(id);
+		if (person != null) {
+			person.setName(per.getName());
+			personRepos.merge(person);
+		} else {
+			throw new RuntimeException("No se encontró la persona con id: " + id);
+		}
+	}
+
+
+
+
 
 }

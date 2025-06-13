@@ -1,8 +1,11 @@
 package com.beesion.ms.test.dto;
 
+import lombok.Data;
+
 import java.util.Objects;
 
-public class Temperatura {
+@Data
+public class TemperaturaDto {
 
 	private String ciudad;
 
@@ -23,7 +26,7 @@ public class Temperatura {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Temperatura other = (Temperatura) obj;
+		TemperaturaDto other = (TemperaturaDto) obj;
 		return Objects.equals(ciudad, other.ciudad) && maxima == other.maxima && minima == other.minima;
 	}
 
@@ -31,39 +34,14 @@ public class Temperatura {
 		return Objects.hash(ciudad, maxima, minima);
 	}
 
-	public Temperatura() {
+	public TemperaturaDto() {
 		super();
 	}
 
-	public Temperatura(String ciudad, int minima, int maxima) {
+	public TemperaturaDto(String ciudad, int minima, int maxima) {
 		super();
 		this.ciudad = ciudad;
 		this.minima = minima;
 		this.maxima = maxima;
 	}
-
-	public String getCiudad() {
-		return ciudad;
-	}
-
-	public void setCiudad(String ciudad) {
-		this.ciudad = ciudad;
-	}
-
-	public int getMinima() {
-		return minima;
-	}
-
-	public void setMinima(int minima) {
-		this.minima = minima;
-	}
-
-	public int getMaxima() {
-		return maxima;
-	}
-
-	public void setMaxima(int maxima) {
-		this.maxima = maxima;
-	}
-
 }

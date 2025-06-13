@@ -7,10 +7,7 @@ import com.beesion.ms.test.dto.BookDto;
 import com.beesion.ms.test.repository.BookRepository;
 
 import jakarta.inject.Inject;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -50,6 +47,16 @@ public class BookResource {
 			return Response.status(400).entity("No existe ese id").build();
 		}
 	}
+
+	@GET
+	public Response getAllBooks() {
+		var books = repo.listAll();
+		if(books != null && !books.isEmpty()) {
+			return Response.ok(books).build();
+		}else {
+			return Response.status(400).entity("No hay libros registrados").build();
+		}
+	}
 	
 	@GET
 	@Path("mayorAId/{id}")
@@ -57,6 +64,32 @@ public class BookResource {
 		var book = repo.find("numpages > ?1", id).list();
 		if(book != null) {
 			return Response.ok(book).build();
+		}else {
+			return Response.status(400).entity("No existe ese id").build();
+		}
+	}
+
+	@PUT
+	public Response update(BookDto b) {
+		var book = repo.findById(b.getId());
+		if(book != null) {
+			book.setNumPages(b.getNumPages());
+			book.setPubDate(b.getPubDate());
+			book.setDescription(b.getDescription());
+			book.setTitle(b.getTitle());
+			repo.persist(book);
+			return Response.ok("Se ha actualizado").build();
+		}else {
+			return Response.status(400).entity("No existe ese id").build();
+		}
+	}
+
+	@DELETE
+	public Response delete(@QueryParam("id") Long id) {
+		var book = repo.findById(id);
+		if(book != null) {
+			repo.delete(book);
+			return Response.ok("Se ha eliminado").build();
 		}else {
 			return Response.status(400).entity("No existe ese id").build();
 		}
