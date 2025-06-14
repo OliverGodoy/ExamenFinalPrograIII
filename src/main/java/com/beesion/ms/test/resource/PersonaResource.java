@@ -2,7 +2,7 @@ package com.beesion.ms.test.resource;
 
 import com.beesion.ms.model.Address;
 import com.beesion.ms.model.Person;
-import com.beesion.ms.test.dto.AddressDto;
+import com.beesion.ms.test.dto.AddressResponseDto;
 import com.beesion.ms.test.dto.PersonDto;
 import com.beesion.ms.test.repository.AddressRepository;
 import com.beesion.ms.test.repository.PersonRepo;
@@ -10,9 +10,11 @@ import com.beesion.ms.test.service.impl.PersonService;
 
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Path("/Person")
 public class PersonaResource {
@@ -60,27 +62,18 @@ public class PersonaResource {
 		}
 	}
 
-	@POST
+	@GET
 	@Path("/{id}/addresses")
-	public Response addAddressToPerson(@PathParam("id") Long personId, AddressDto addressDto) {
-		Person person = personRepo.findById(personId);
-		if (person == null) {
-			return Response.status(Response.Status.NOT_FOUND)
-					.entity("No se encontró la persona con ID: " + personId)
-					.build();
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<AddressResponseDto> getPersonAddresses(@PathParam("id") Long personId) {
+		List<Address> addresses = addressRepository.findByPersonId(personId);
+		if (addresses.isEmpty()) {
+			throw new NotFoundException("No se encontraron direcciones para la persona con ID: " + personId);
 		}
+		return addresses.stream()
+				.map(AddressResponseDto::fromAddress)
+				.collect(Collectors.toList());
 
-		Address address = new Address();
-		address.setStreet(addressDto.getStreet());
-		address.setCity(addressDto.getCity());
-		address.setCountry(addressDto.getCountry());
-		address.setPerson(person);
-
-		addressRepository.save(address);
-		return Response.status(Response.Status.CREATED).build();
 	}
-
-
-
 
 }

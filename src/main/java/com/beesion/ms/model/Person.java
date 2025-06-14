@@ -6,9 +6,6 @@ import java.util.List;
 
 @Entity
 public class Person {
-
-
-
 	@Id
 	@SequenceGenerator(name = "PersonIdGenerator")
 	@GeneratedValue(generator = "PersonIdGenerator")
