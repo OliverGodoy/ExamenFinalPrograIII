@@ -5,8 +5,11 @@ import java.time.LocalDate;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import lombok.Data;
+
 
 @Entity
+@Data
 public class Book {
 
 	@Id
@@ -17,44 +20,5 @@ public class Book {
 	private LocalDate pubDate;
 	private String description;
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public int getNumPages() {
-		return numPages;
-	}
-
-	public void setNumPages(int numPages) {
-		this.numPages = numPages;
-	}
-
-	public LocalDate getPubDate() {
-		return pubDate;
-	}
-
-	public void setPubDate(LocalDate pubDate) {
-		this.pubDate = pubDate;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
 
 }

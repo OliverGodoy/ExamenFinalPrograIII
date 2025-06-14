@@ -1,19 +1,31 @@
 package com.beesion.ms.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 public class Person {
 
-	private Long id;
-	private String name;
+
 
 	@Id
 	@SequenceGenerator(name = "PersonIdGenerator")
 	@GeneratedValue(generator = "PersonIdGenerator")
+	private Long id;
+	private String name;
+
+	@OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
+	private List<Address> addresses;
+
+	public List<Address> getAddresses() {
+		return addresses;
+	}
+
+	public void setAddresses(List<Address> addresses) {
+		this.addresses = addresses;
+	}
+
 	public Long getId() {
 		return id;
 	}
